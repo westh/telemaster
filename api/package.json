@@ -6,6 +6,9 @@
   "author": "westh",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": "15.x"
+  },
   "scripts": {
     "start": "nodemon app.js",
     "start-production": "node app.js"

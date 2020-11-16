@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+
+  heymast-mongo:
+    container_name: heymast-mongo
+    image: mongo:latest
+    volumes:
+      - ./mongo-data:/data
+    ports:
+      - 27017:27017
+
+  heymast-api:
+    container_name: heymast-api
+    image: node:latest
+    user: node
+    working_dir: /home/node/app
+    environment:
+      NODE_ENV: development
+      MONGO_CONNECTION_STRING: mongodb://heymast-mongo/heymast
+      MONGO_COLLECTION_NAME: masts
+      MONGO_DB_NAME: heymast
+      PORT: 8000
+    ports:
+      - 8000:8000
+    depends_on:
+      - heymast-mongo
+    volumes:
+      - ./api:/home/node/app
+    command: yarn start

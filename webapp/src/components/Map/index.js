@@ -179,6 +179,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
 
     // clean up on unmount
     return () => map.current.remove()
+    // eslint-disable-next-line
   }, [])
 
   return (

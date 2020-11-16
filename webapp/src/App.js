@@ -15,7 +15,7 @@ const StyledLayout = styled(Layout)`
 function App() {
   const popUpRef = useRef()
   const [selectedMasts, setSelectedMasts] = useState([])
-  const [{ data, isLoading, isError }, fetchData] = useMasts(
+  const [{ data, isLoading }, fetchData] = useMasts(
     { short: true },
     {
       type: 'FeatureCollection',

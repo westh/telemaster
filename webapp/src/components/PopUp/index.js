@@ -29,7 +29,7 @@ const DataColumn = styled.div`
 `
 
 function MastInformation ({ id }) {
-  const [{ data, isLoading, isError }] = useMast(id)
+  const [{ data }] = useMast(id)
 
   return (
     <Description>

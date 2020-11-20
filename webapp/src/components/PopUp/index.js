@@ -86,7 +86,7 @@ function MastInformation ({ id }) {
           Latitude:
         </TitleColumn>
         <DataColumn>
-        {data?.latitude && data.latitude.toFixed(2)}
+        {data?.latitude && data.latitude.toFixed(4)}
         </DataColumn>
       </Row>
       <Row>
@@ -94,7 +94,7 @@ function MastInformation ({ id }) {
           Longitude:
         </TitleColumn>
         <DataColumn>
-          {data?.longitude && data.longitude.toFixed(2)}
+          {data?.longitude && data.longitude.toFixed(4)}
         </DataColumn>
       </Row>
     </Description>

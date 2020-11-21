@@ -1,7 +1,8 @@
-import { Pagination } from 'antd'
-import useMast from 'hooks/use-mast'
+import { Pagination, Tabs, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
+const { TabPane } = Tabs
 
 const Description = styled.div`
   font-size: 12px;
@@ -10,7 +11,7 @@ const Description = styled.div`
 
 const Wrapper = styled.div`
   padding: 5px;
-  width: 250px;
+  width: 400px;
 `
 
 const StyledPagination = styled(Pagination)`
@@ -28,9 +29,11 @@ const TitleColumn = styled.div`
 const DataColumn = styled.div`
 `
 
-function MastInformation ({ id }) {
-  const [{ data }] = useMast(id)
+const StyledTag = styled(Tag)`
+  margin-top: 2px;
+`
 
+function MastInformation ({ operatorAggregatedData }) {
   return (
     <Description>
       <Row>
@@ -38,7 +41,7 @@ function MastInformation ({ id }) {
           Operator:
         </TitleColumn>
         <DataColumn>
-          {data?.operator}
+          {operatorAggregatedData?.operator}
         </DataColumn>
       </Row>
       <Row>
@@ -46,7 +49,16 @@ function MastInformation ({ id }) {
           Technology:
         </TitleColumn>
         <DataColumn>
-          {data?.technology}
+          {
+            operatorAggregatedData?.technology &&
+            operatorAggregatedData.technology.map(technology => {
+              return (
+                <Tag color={technology[1]}>
+                  {technology[0]}
+                </Tag>
+              )
+            })
+          }
         </DataColumn>
       </Row>
       <Row>
@@ -54,7 +66,16 @@ function MastInformation ({ id }) {
           Frequency:
         </TitleColumn>
         <DataColumn>
-          {data?.frequency}
+        {
+          operatorAggregatedData?.frequency &&
+          operatorAggregatedData.frequency.map(frequency => {
+            return (
+              <StyledTag color={frequency[1]}>
+                {frequency[0]}
+              </StyledTag>
+            )
+          })
+        }
         </DataColumn>
       </Row>
       <Row>
@@ -62,7 +83,7 @@ function MastInformation ({ id }) {
           City:
         </TitleColumn>
         <DataColumn>
-          {data?.city}
+          {operatorAggregatedData?.city}
         </DataColumn>
       </Row>
       <Row>
@@ -70,7 +91,7 @@ function MastInformation ({ id }) {
           Postal code:
         </TitleColumn>
         <DataColumn>
-          {data?.postalCode}
+          {operatorAggregatedData?.postalCode}
         </DataColumn>
       </Row>
       <Row>
@@ -78,7 +99,7 @@ function MastInformation ({ id }) {
           Street:
         </TitleColumn>
         <DataColumn>
-          {data?.street}
+          {operatorAggregatedData?.street}
         </DataColumn>
       </Row>
       <Row>
@@ -86,7 +107,7 @@ function MastInformation ({ id }) {
           Latitude:
         </TitleColumn>
         <DataColumn>
-        {data?.latitude && data.latitude.toFixed(4)}
+        {operatorAggregatedData?.latitude}
         </DataColumn>
       </Row>
       <Row>
@@ -94,7 +115,7 @@ function MastInformation ({ id }) {
           Longitude:
         </TitleColumn>
         <DataColumn>
-          {data?.longitude && data.longitude.toFixed(4)}
+          {operatorAggregatedData?.longitude}
         </DataColumn>
       </Row>
     </Description>
@@ -102,23 +123,71 @@ function MastInformation ({ id }) {
 }
 
 function PopUp ({ masts }) {
-  const [mastNumber, setMastNumber] = useState(1)
+  const [mastsPerOperatorObject, setMastsPerOperatorObject] = useState({})
 
   useEffect(() => {
-    setMastNumber(1)
+    async function fetchAllData () {
+      const mastData = await Promise.all(
+        masts.map(mast => {
+          return fetch(`${process.env.REACT_APP_BASE_URL}/masts/${mast.id}`)
+            .then(response => response.json())
+          }
+        )
+      )
+
+      function getAggregation (operatorSpecificMasts) {
+        const technologyColorMapping = {
+          GSM: 'green',
+          UMTS: 'cyan',
+          LTE: 'blue',
+        }
+
+        const technologies = operatorSpecificMasts?.map(mast => [mast?.technology, technologyColorMapping[mast?.technology]])
+
+        return {
+          operator: operatorSpecificMasts[0]?.operator,
+          technology: Array.from(new Set(technologies.map(x=>JSON.stringify(x))), x=>JSON.parse(x)),
+          frequency: operatorSpecificMasts?.map(mast => [mast?.frequency, technologyColorMapping[mast?.technology]]),
+          city: operatorSpecificMasts[0]?.city,
+          postalCode: operatorSpecificMasts[0]?.postalCode,
+          street: operatorSpecificMasts[0]?.street,
+          latitude: operatorSpecificMasts[0]?.latitude && operatorSpecificMasts[0]?.latitude.toFixed(4),
+          longitude: operatorSpecificMasts[0]?.longitude && operatorSpecificMasts[0]?.longitude.toFixed(4)
+        }
+      }
+
+      setMastsPerOperatorObject({
+        tdc: getAggregation(mastData.filter(mast => mast?.operator.includes('TDC'))),
+        teliaTelenor: getAggregation(mastData.filter(mast => mast?.operator.includes('Telia'))),
+        three: getAggregation(mastData.filter(mast => mast?.operator.includes('3')))
+      })
+    }
+
+    fetchAllData()
   }, [masts])
 
   return (
     <Wrapper>
-      <MastInformation id={masts[mastNumber - 1]?.id} />
-      <StyledPagination
-        size='small'
-        responsive={true}
-        current={mastNumber}
-        pageSize={1}
-        total={masts.length}
-        onChange={page => setMastNumber(page)}
-      />
+      <Tabs size='small'>
+        {
+          mastsPerOperatorObject?.teliaTelenor?.operator &&
+          <TabPane tab='Telenor/Telia' key='1'>
+            <MastInformation operatorAggregatedData={mastsPerOperatorObject?.teliaTelenor} />
+          </TabPane>
+        }
+        {
+          mastsPerOperatorObject?.tdc?.operator &&
+          <TabPane tab='TDC' key='2'>
+            <MastInformation operatorAggregatedData={mastsPerOperatorObject?.tdc} />
+          </TabPane>
+        }
+        {
+          mastsPerOperatorObject?.three?.operator &&
+          <TabPane tab='3 DK' key='3'>
+            <MastInformation operatorAggregatedData={mastsPerOperatorObject?.three} />
+          </TabPane>
+        }
+      </Tabs>
     </Wrapper>
   )
 }

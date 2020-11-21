@@ -1,4 +1,4 @@
-import { Pagination, Tabs, Tag } from 'antd'
+import { Tabs, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -12,10 +12,6 @@ const Description = styled.div`
 const Wrapper = styled.div`
   padding: 5px;
   width: 400px;
-`
-
-const StyledPagination = styled(Pagination)`
-  max-width: 300px;
 `
 
 const Row = styled.div`

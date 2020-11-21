@@ -57,7 +57,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
         mapboxgl
       })
     )
-    
+
     map.current.addControl(new NavigationControl())
     map.current.addControl(new FullscreenControl())
 
@@ -160,9 +160,9 @@ const Map = ({ data, onPopUp, popUpRef }) => {
       map.current.on('click', 'mast-circle', circles => {
         if (circles.features.length) {
           const coordinates = circles.features[0].geometry.coordinates.slice()
-          
+
           onPopUp(circles.features.map(features => features.properties))
-          
+
           new Popup()
             .setLngLat(coordinates)
             .setDOMContent(popUpRef.current)
@@ -170,7 +170,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
         }
       })
     })
-  
+
     // map.current.zoomToFitAllPoints = ({ points, padding }) => {
     //   const boundingBox = new LngLatBounds()
     //   points.forEach(coordinates => boundingBox.extend(coordinates))

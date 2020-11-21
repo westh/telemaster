@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+
 
 export default (initialMastQuery, initialData) => {
   const [data, setData] = useState(initialData)
   const [query, setQuery] = useState(initialMastQuery)
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
- 
+
   function queryToUrl (params) {
     let url = new URL(`${process.env.REACT_APP_BASE_URL}/masts`)
     url.search = new URLSearchParams(params).toString()
@@ -16,7 +17,7 @@ export default (initialMastQuery, initialData) => {
     async function fetchData () {
       setIsError(false)
       setIsLoading(true)
- 
+
       try {
         const result = await fetch(queryToUrl(query)).then(response => response.json())
         setData(
@@ -41,13 +42,14 @@ export default (initialMastQuery, initialData) => {
         )
       }
       catch (error) {
+        console.error(error)
         setIsError(true)
       }
       setIsLoading(false)
     }
- 
+
     fetchData()
   }, [query])
- 
+
   return [{ data, isLoading, isError }, setQuery]
 }

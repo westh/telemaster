@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react'
 
 export default (initialMastQuery, initialData) => {
   const [data, setData] = useState(initialData)

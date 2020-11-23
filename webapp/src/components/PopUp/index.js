@@ -130,6 +130,7 @@ function MastInformation({ operatorAggregatedData }) {
 }
 
 function PopUp({ masts }) {
+  // eslint-disable-next-line
   const [mastsPerOperatorObject, isLoading, isError] = useAggregatedMasts(masts)
 
   return (

@@ -22,17 +22,17 @@ router.get('/', asyncHandler(async (req, res) => {
 
   const result = isShortResultSet
     ? await mastsCollection
-        .find(query)
-        .project({
-          _id: 1,
-          latitude: 1,
-          longitude: 1,
-          operator: 1
-        })
-        .toArray()
+      .find(query)
+      .project({
+        _id: 1,
+        latitude: 1,
+        longitude: 1,
+        operator: 1
+      })
+      .toArray()
     : await mastsCollection
-        .find(query)
-        .toArray()
+      .find(query)
+      .toArray()
 
   return res.status(200).json(result)
 }))
@@ -65,18 +65,18 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }))
 
 function getAggregation(masts) {
-  const streets = {};
+  const streets = {}
   masts.forEach((mast) => {
-    const street = streets[mast.street];
+    const street = streets[mast.street]
 
     if (street) {
-      const technologyForMast = street.technologies[mast.technology];
+      const technologyForMast = street.technologies[mast.technology]
       // Init the technology key if it doesn't exist with an empty set
       if (!technologyForMast) {
-        street.technologies[mast.technology] = new Set();
+        street.technologies[mast.technology] = new Set()
       }
-      street.technologies[mast.technology].add(mast.frequency);
-      return;
+      street.technologies[mast.technology].add(mast.frequency)
+      return
     }
     streets[mast.street] = {
       operator: mast.operator,
@@ -86,24 +86,24 @@ function getAggregation(masts) {
       street: mast.street,
       latitude: mast.latitude?.toFixed(4),
       longitude: mast.longitude?.toFixed(4),
-    };
-  });
+    }
+  })
 
   return Object.values(streets).map((aggregatedMast) => {
-    const technologies = {};
+    const technologies = {}
 
     Object.keys(aggregatedMast.technologies).forEach(
       (technology) =>
         (technologies[technology] = [
           ...aggregatedMast.technologies[technology],
         ])
-    );
+    )
 
     return {
       ...aggregatedMast,
       technologies,
-    };
-  });
+    }
+  })
 }
 
 

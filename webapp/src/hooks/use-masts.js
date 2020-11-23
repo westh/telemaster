@@ -13,33 +13,38 @@ export default (initialMastQuery, initialData) => {
     return url
   }
 
+  function updateData(result) {
+    setData({
+      type: 'FeatureCollection',
+      features: result.map((mast) => {
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [mast.longitude, mast.latitude],
+          },
+          properties: {
+            id: mast._id,
+            operator: mast.operator,
+            latitude: mast.latitude,
+            longitude: mast.longitude,
+          },
+        }
+      }),
+    })
+  }
+
   useEffect(() => {
     async function fetchData () {
       setIsError(false)
       setIsLoading(true)
 
       try {
-        const result = await fetch(queryToUrl(query)).then(response => response.json())
-        setData(
-          {
-            type: 'FeatureCollection',
-            features: result.map(mast => {
-              return {
-                type: 'Feature',
-                geometry: {
-                  type: 'Point',
-                  coordinates: [mast.longitude, mast.latitude]
-                },
-                properties: {
-                  id: mast._id,
-                  operator: mast.operator,
-                  latitude: mast.latitude,
-                  longitude: mast.longitude
-                }
-              }
-            })
-          }
-        )
+        const isRequestingAllMasts = JSON.stringify({ short: true }) === JSON.stringify (query)
+        const result = isRequestingAllMasts
+          ? await import('data/all_data.json').then(mastData => mastData.default)
+          : await fetch(queryToUrl(query)).then(response => response.json())
+        updateData(result)
       }
       catch (error) {
         console.error(error)

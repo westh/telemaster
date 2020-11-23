@@ -40,10 +40,10 @@ export default (initialMastQuery, initialData) => {
       setIsLoading(true)
 
       try {
-        let result = await import('../data/all_data.json').then(mastData => mastData.default)
-        updateData(result)
-        setIsLoading(false)
-        result = await fetch(queryToUrl(query)).then(response => response.json())
+        const isRequestingAllMasts = JSON.stringify({ short: true }) === JSON.stringify (query)
+        const result = isRequestingAllMasts
+          ? await import('data/all_data.json').then(mastData => mastData.default)
+          : await fetch(queryToUrl(query)).then(response => response.json())
         updateData(result)
       }
       catch (error) {

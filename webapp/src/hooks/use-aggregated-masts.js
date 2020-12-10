@@ -13,9 +13,17 @@ export default (masts) => {
       setIsLoading(true)
 
       try {
-        const mastsCommaSeparated = masts.map(mast => mast.id).join(',')
         const mastData = await fetch(
-            `${process.env.REACT_APP_BASE_URL}/masts/list?ids=${mastsCommaSeparated}`
+            `${process.env.REACT_APP_BASE_URL}/masts/list`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                ids: masts.map(mast => mast.id)
+              })
+            }
           )
           .then(response => response.json())
 

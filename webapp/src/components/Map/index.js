@@ -19,6 +19,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
   const [lng, setLng] = useState(10.7600)
   const [lat, setLat] = useState(56.3160)
   const [zoom, setZoom] = useState(6.35)
+  const [doesMapExist, setDoesMapExist] = useState(false)
 
   function createSourceIfNotAlreadyExists (sourceName, data) {
     const source = map.current.getSource(sourceName)
@@ -26,29 +27,30 @@ const Map = ({ data, onPopUp, popUpRef }) => {
     if (!doesSourceExist) {
       map.current.addSource(sourceName, {
         type: 'geojson',
-        data
+        data,
       })
     }
     return !doesSourceExist
   }
 
   useEffect(() => {
-    const doesMapExist = !!map.current
     if (!doesMapExist) return
 
     const wasSourceCreated = createSourceIfNotAlreadyExists('all', data)
     if (wasSourceCreated) return
-    
+
     const source = map.current.getSource('all')
     source.setData(data)
-  }, [data])
+  }, [data, doesMapExist])
 
   useEffect(() => {
     map.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/dark-v10',
+      // This should improve mapbox performance according to
+      // this: https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/#remove-unused-features
+      style: 'mapbox://styles/mapbox/dark-v10?optimize=true',
       center: [lng, lat],
-      zoom: zoom
+      zoom: zoom,
     })
 
     map.current.addControl(
@@ -57,7 +59,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
         mapboxgl
       })
     )
-    
+
     map.current.addControl(new NavigationControl())
     map.current.addControl(new FullscreenControl())
 
@@ -68,6 +70,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
     })
 
     map.current.on('load', () => {
+      setDoesMapExist(true)
       createSourceIfNotAlreadyExists('all', {
         type: 'FeatureCollection',
         features: []
@@ -160,9 +163,9 @@ const Map = ({ data, onPopUp, popUpRef }) => {
       map.current.on('click', 'mast-circle', circles => {
         if (circles.features.length) {
           const coordinates = circles.features[0].geometry.coordinates.slice()
-          
+
           onPopUp(circles.features.map(features => features.properties))
-          
+
           new Popup()
             .setLngLat(coordinates)
             .setDOMContent(popUpRef.current)
@@ -170,7 +173,7 @@ const Map = ({ data, onPopUp, popUpRef }) => {
         }
       })
     })
-  
+
     // map.current.zoomToFitAllPoints = ({ points, padding }) => {
     //   const boundingBox = new LngLatBounds()
     //   points.forEach(coordinates => boundingBox.extend(coordinates))

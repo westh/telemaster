@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { json, Router } from 'express'
 import mongodb from 'mongodb'
 import asyncHandler from '../middleware/async-handler.js'
 import { mastsCollection } from '../mongo.js'
@@ -37,14 +37,14 @@ router.get('/', asyncHandler(async (req, res) => {
   return res.status(200).json(result)
 }))
 
-router.get('/list', asyncHandler(async (req, res) => {
-  const { ids } = req.query
-  const separatedIds = ids.split(',')
+router.post('/list', json(), asyncHandler(async (req, res) => {
+  console.log(req.body)
+  const { ids } = req.body
 
   const masts = await mastsCollection
     .find({
       _id: {
-        $in: separatedIds.map(id => new mongodb.ObjectId(id))
+        $in: ids.map(id => new mongodb.ObjectId(id))
       }
     })
     .toArray()

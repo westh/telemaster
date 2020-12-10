@@ -133,7 +133,7 @@ function Sidebar ({ loading, onApply }) {
         </WrapperContent>
       </Wrapper>
       <Footer>
-        <a href='https://github.com/westh/mastscraper'>
+        <a href='https://github.com/westh/telemaster'>
           <StyledGitHubLogo />
           by westh
         </a>

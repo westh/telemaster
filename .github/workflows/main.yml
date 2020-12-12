@@ -19,15 +19,15 @@ jobs:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-    - name: 📦 yarn install
+    - name: 📦 yarn install root 🦷
       run: yarn --frozen-lockfile
 
-    - name: 📦 yarn install webapp
+    - name: 📦 yarn install 🕸 app
       working-directory: ./webapp
       run: yarn --frozen-lockfile
 
-    - name: 📦 yarn install
-      working-directory: ./app
+    - name: 📦 yarn install 🅰🅿🅸
+      working-directory: ./api
       run: yarn --frozen-lockfile
 
     - name: 🧼 linting

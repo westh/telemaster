@@ -39,5 +39,10 @@ module.exports = {
       'error',
       { 'argsIgnorePattern': '^_' }
     ]
+  },
+  'settings': {
+    'react': {
+      'version': 'latest'
+    }
   }
 }

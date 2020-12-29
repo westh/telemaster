@@ -1,10 +1,12 @@
 import { Layout } from 'antd'
 import 'antd/dist/antd.css'
+import ErrorFallback from 'components/ErrorFallback'
 import Map from 'components/Map'
 import PopUp from 'components/PopUp'
 import Sidebar from 'components/Sidebar'
 import useMasts from 'hooks/use-masts'
 import React, { useRef, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import styled from 'styled-components'
 const { Content } = Layout
 
@@ -31,7 +33,12 @@ function App() {
   }
 
   return (
-    <>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        // reset the state of your app so the error doesn't happen again
+      }}
+    >
       <StyledLayout>
         <Sidebar
           loading={isLoading}
@@ -48,7 +55,7 @@ function App() {
       <div ref={popUpRef}>
         <PopUp masts={selectedMasts} />
       </div>
-    </>
+    </ErrorBoundary>
   )
 }
 

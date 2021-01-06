@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import Button from 'components/Button'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -23,21 +23,20 @@ const ErrorMessage = styled.pre`
   border: 1px solid rgba(100, 100, 100, 0.2);
   border-radius: 3px;
   height: 50vh;
-  overflow: scroll;
+  overflow-y: scroll;
 `
 
 function ErrorFallback ({error, resetErrorBoundary}) {
   return (
     <CenterWrapper>
       <WidthWrapper>
-        <h1>Oops... Something went wrong</h1>
+        <h2>Oops... Something went wrong</h2>
         <ErrorMessage>
           {error.message}
         </ErrorMessage>
         <Button
-          type="primary"
-          shape="round"
           size="large"
+          type='secondary'
           onClick={resetErrorBoundary}
         >
           Take me back

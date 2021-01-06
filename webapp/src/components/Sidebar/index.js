@@ -1,66 +1,28 @@
-import { GithubFilled } from '@ant-design/icons'
-import { Button, Checkbox, Divider, Select } from 'antd'
+import { Checkbox, Select } from '@geist-ui/react'
+import Button from 'components/Button'
+import Heading from 'components/Heading'
 import {
   frequenciesMapping,
-  operatorsMapping, technologiesMapping
+  operatorsColorMapping,
+  operatorsMapping,
+  technologiesMapping
 } from 'lib/mappings'
 import React, { useState } from 'react'
-import styled from 'styled-components'
-const { Option } = Select
-
-const StyledSider = styled.div`
-  position: absolute;
-  margin-top: 10px;
-  margin-left: 10px;
-  background: white;
-  border-radius: 4px;
-  z-index: 1;
-  width: 300px;
-`
-
-const Wrapper = styled.div`
-  margin-top: 20px;
-`
-
-const StyledSelect = styled(Select)`
-  margin-top: 10px;
-  text-align: start;
-  width: 80%;
-`
-
-const Spacer = styled.div`
-  margin-top: 40px;
-`
-
-const StyledDivider = styled(Divider)`
-  border-color: rgba(0, 0, 0, 0.1) !important;
-`
-const Footer = styled.div`
-  margin-top: 10px;
-  padding: 20px;
-  font-size: 14px;
-  a {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    color: rgba(0, 0, 0, 0.2);
-  }
-`
-
-const StyledGitHubLogo = styled(GithubFilled)`
-  font-size: 30px;
-  margin-right: 10px;
-  color: rgba(0, 0, 0, 0.85);
-`
-
-const WrapperContent = styled.div`
-  display: flex;
-  justify-content: left;
-  padding: 0px 20px;
-`
+import {
+  Circle,
+  ContentWrapper,
+  FlexWrapper,
+  Footer,
+  MainWrapper,
+  OperatorCheckbox,
+  Spacer,
+  StyledCheckbox,
+  StyledGitHubLogo,
+  StyledSider
+} from './SidebarSpecific'
 
 const frequencyOptions = Object.keys(frequenciesMapping)
-  .map(freq => <Option key={freq}>{freq}</Option>)
+  .map(freq => <Select.Option value={freq}>{freq}</Select.Option>)
 
 function Sidebar ({ loading, onApply }) {
   const [technologies, setTechnologies] = useState(Object.keys(technologiesMapping))
@@ -87,51 +49,67 @@ function Sidebar ({ loading, onApply }) {
 
   return (
     <StyledSider>
-      <Wrapper>
-        <StyledDivider orientation="left">
+      <MainWrapper>
+        <Heading>
           Access Technologies
-        </StyledDivider>
-        <WrapperContent>
+        </Heading>
+        <ContentWrapper>
           <Checkbox.Group
-            options={['2G', '3G', '4G']}
-            defaultValue={technologies}
+            value={technologies}
             onChange={value => setTechnologies(value)}
-          />
-        </WrapperContent>
-        <StyledDivider orientation="left">
+          >
+            {['2G', '3G', '4G', '5G'].map(technology => 
+              <StyledCheckbox value={technology}>{technology}</StyledCheckbox>
+            )}
+          </Checkbox.Group>
+        </ContentWrapper>
+        <Heading>
           Operators
-        </StyledDivider>
-        <WrapperContent>
+        </Heading>
+        <ContentWrapper>
           <Checkbox.Group
-            options={['TDC', 'Telia/Telenor', '3 DK']}
-            defaultValue={operators}
+            value={operators}
             onChange={value => setOperators(value)}
-          />
-        </WrapperContent>
-        <StyledDivider orientation="left">
+          >
+            {['TDC', '3 DK', 'Telia/Telenor'].map(operator =>
+              <OperatorCheckbox value={operator}>
+                <FlexWrapper>
+                  <Circle
+                    mainColor={operatorsColorMapping[operator].main}
+                    borderColor={operatorsColorMapping[operator].border}
+                  />
+                  {operator}
+                </FlexWrapper>
+              </OperatorCheckbox>
+            )}
+          </Checkbox.Group>
+        </ContentWrapper>
+        <Heading>
           Frequencies
-        </StyledDivider>
-        <WrapperContent>
-          <StyledSelect
-            mode='multiple'
+        </Heading>
+        <ContentWrapper>
+          <Select
+            multiple
+            size='small'
             placeholder='e.g. 2100MHz'
+            width='300px'
             onChange={value => setFrequencies(value)}
           >
             {frequencyOptions}
-          </StyledSelect>
-        </WrapperContent>
+          </Select>
+        </ContentWrapper>
         <Spacer />
-        <WrapperContent>
+        <ContentWrapper>
           <Button
-            type='primary'
-            block
+            type='secondary'
+            width='100%'
             loading={loading}
             onClick={() => handleClick()}
           >
             Apply
           </Button>
-        </WrapperContent>
-      </Wrapper>
+        </ContentWrapper>
+      </MainWrapper>
       <Footer>
         <a href='https://github.com/westh/telemaster'>
           <StyledGitHubLogo />

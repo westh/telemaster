@@ -28,15 +28,17 @@ export default (masts) => {
           .then(response => response.json())
 
         const technologyColorMapping = {
-          GSM: 'green',
-          UMTS: 'cyan',
-          LTE: 'blue',
+          GSM: '#fca311',
+          UMTS: '#74aa9d',
+          LTE: '#7699d4',
+          NR: '#cb04a5'
         }
 
         const technologyGenerationMapping = {
           GSM: '2G',
           UMTS: '3G',
           LTE: '4G',
+          NR: '5G'
         }
 
         Object.keys(mastData).forEach(operator => {

@@ -16,8 +16,8 @@ const Map = ({ data, onPopUp, popUpRef }) => {
   const mapContainerRef = useRef(null)
   const map = useRef()
 
-  const [lng, setLng] = useState(10.7600)
-  const [lat, setLat] = useState(56.3160)
+  const [lng, setLng] = useState(10.36)
+  const [lat, setLat] = useState(56.21)
   const [zoom, setZoom] = useState(6.35)
   const [doesMapExist, setDoesMapExist] = useState(false)
 
@@ -77,42 +77,6 @@ const Map = ({ data, onPopUp, popUpRef }) => {
       })
 
       map.current.addLayer({
-        id: 'masts-heat',
-        type: 'heatmap',
-        source: 'all',
-        maxzoom: 9,
-        paint: {
-          'heatmap-intensity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0, 1, 9, 3
-          ],
-          'heatmap-color': [
-            'interpolate',
-            ['linear'],
-            ['heatmap-density'],
-            0, 'rgba(0, 0, 0, 0)',
-            0.2, 'rgba(192, 253, 255, 0.3)',
-            0.5, 'rgba(192, 253, 255, 0.6)',
-            1, 'rgba(200, 231, 255, 0.7)'
-          ],
-          'heatmap-radius': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0, 2, 9, 20
-          ],
-          'heatmap-opacity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            7, 1, 9, 0
-          ]
-        }
-      }, 'waterway-label')
-
-      map.current.addLayer({
         id: 'mast-circle',
         type: 'circle',
         source: 'all',
@@ -132,22 +96,32 @@ const Map = ({ data, onPopUp, popUpRef }) => {
             'Hi3G Denmark ApS',
             '#f37423',
             'Telia - Telenor (TT Netværket)',
-            ' #996EE3',
+            '#996EE3',
             /* other */ '#ccc'
           ],
-          'circle-stroke-color': 'white',
-          'circle-stroke-width': 0.8,
+          'circle-stroke-color': [
+            'match',
+            ['get', 'operator'],
+            'TDC Mobil A/S',
+            'rgba(16, 110, 180, 0.2)',
+            'Hi3G Denmark ApS',
+            'rgba(243, 116, 35, 0.2)',
+            'Telia - Telenor (TT Netværket)',
+            'rgba(153, 110, 227, 0.2)',
+            /* other */ '#ccc'
+          ],
+          'circle-stroke-width': 4,
           'circle-opacity': [
             'interpolate',
             ['linear'],
             ['zoom'],
-            7, 0, 8, 1
+            7, 0.5, 8, 1
           ],
           'circle-stroke-opacity': [
             'interpolate',
             ['linear'],
             ['zoom'],
-            7, 0, 8, 1
+            7, 0.5, 8, 1
           ]
         }
       })
@@ -173,12 +147,6 @@ const Map = ({ data, onPopUp, popUpRef }) => {
         }
       })
     })
-
-    // map.current.zoomToFitAllPoints = ({ points, padding }) => {
-    //   const boundingBox = new LngLatBounds()
-    //   points.forEach(coordinates => boundingBox.extend(coordinates))
-    //   map.current.fitBounds(boundingBox, { padding, maxZoom: 10 })
-    // }
 
     // clean up on unmount
     return () => map.current.remove()

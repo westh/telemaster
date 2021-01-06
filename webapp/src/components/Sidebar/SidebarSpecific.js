@@ -65,8 +65,8 @@ const OperatorCheckbox = styled(Checkbox)`
 
 const Circle = styled.div`
   border-radius: 50%;
-  height: 15px;
-  width: 15px;
+  height: 10px;
+  width: 10px;
   background-color: ${props => props.mainColor};
   border-radius: 18px;
   border: 3px solid ${props => props.borderColor};

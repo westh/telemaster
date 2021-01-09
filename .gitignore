@@ -120,6 +120,6 @@ dist
 .AppleDouble
 .LSOverride
 
-# Production scripts
+# Production stuff
 bin
-database
+.env.production

@@ -3,9 +3,9 @@ import Button from 'components/Button'
 import Heading from 'components/Heading'
 import {
   frequenciesMapping,
+  networkGenerations,
   operatorsColorMapping,
-  operatorsMapping,
-  technologiesMapping
+  operatorsMapping
 } from 'lib/mappings'
 import React, { useState } from 'react'
 import {
@@ -25,7 +25,7 @@ const frequencyOptions = Object.keys(frequenciesMapping)
   .map(freq => <Select.Option value={freq}>{freq}</Select.Option>)
 
 function Sidebar ({ loading, onApply }) {
-  const [technologies, setTechnologies] = useState(Object.keys(technologiesMapping))
+  const [technologies, setTechnologies] = useState(networkGenerations)
   const [operators, setOperators] = useState(Object.keys(operatorsMapping))
   const [frequencies, setFrequencies] = useState()
 
@@ -40,7 +40,7 @@ function Sidebar ({ loading, onApply }) {
   function handleClick () {
     const query = {
       ...(checkValidity(operators) && { operators: mapValues(operators, operatorsMapping) }),
-      ...(checkValidity(technologies) && { technologies: mapValues(technologies, technologiesMapping) }),
+      ...(checkValidity(technologies) && { technologies }),
       ...(checkValidity(frequencies) && { frequencies: mapValues(frequencies, frequenciesMapping) })
     }
 
@@ -58,7 +58,7 @@ function Sidebar ({ loading, onApply }) {
             value={technologies}
             onChange={value => setTechnologies(value)}
           >
-            {['2G', '3G', '4G', '5G'].map(technology => 
+            {networkGenerations.map(technology => 
               <StyledCheckbox value={technology}>{technology}</StyledCheckbox>
             )}
           </Checkbox.Group>
@@ -71,7 +71,7 @@ function Sidebar ({ loading, onApply }) {
             value={operators}
             onChange={value => setOperators(value)}
           >
-            {['TDC', '3 DK', 'Telia/Telenor'].map(operator =>
+            {Object.keys(operatorsMapping).map(operator =>
               <OperatorCheckbox value={operator}>
                 <FlexWrapper>
                   <Circle

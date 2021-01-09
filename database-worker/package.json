@@ -1,0 +1,17 @@
+{
+  "name": "database-worker",
+  "version": "1.0.0",
+  "description": "inserts data from the mastscraper into mongodb",
+  "main": "index.js",
+  "author": "westh",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv-flow": "^3.2.0",
+    "mongodb": "^3.6.3",
+    "proj4": "^2.6.3"
+  }
+}

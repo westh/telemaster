@@ -28,17 +28,10 @@ export default (masts) => {
           .then(response => response.json())
 
         const technologyColorMapping = {
-          GSM: '#fca311',
-          UMTS: '#74aa9d',
-          LTE: '#7699d4',
-          NR: '#cb04a5'
-        }
-
-        const technologyGenerationMapping = {
-          GSM: '2G',
-          UMTS: '3G',
-          LTE: '4G',
-          NR: '5G'
+          '2G': '#fca311',
+          '3G': '#74aa9d',
+          '4G': '#7699d4',
+          '5G': '#cb04a5'
         }
 
         Object.keys(mastData).forEach(operator => {
@@ -46,7 +39,7 @@ export default (masts) => {
             const technologies = {}
 
             Object.keys(streetObject.technologies).forEach(technology =>{
-              technologies[technologyGenerationMapping[technology]] = {
+              technologies[technology] = {
                 color: technologyColorMapping[technology],
                 frequencies: streetObject.technologies[technology],
               }

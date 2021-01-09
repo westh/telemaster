@@ -1,8 +1,9 @@
-const technologiesMapping = {
-  '2G': 'GSM',
-  '3G': 'UMTS',
-  '4G': 'LTE',
-}
+const networkGenerations = [
+  '2G',
+  '3G',
+  '4G',
+  '5G'
+]
 
 const operatorsMapping = {
   'TDC': 'TDC Mobil A/S',
@@ -42,7 +43,7 @@ const frequenciesMapping = {
 }
 
 export {
-  technologiesMapping,
+  networkGenerations,
   operatorsMapping,
   operatorsColorMapping,
   operatorsShortNameMapping,

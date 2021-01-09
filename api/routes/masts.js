@@ -31,14 +31,13 @@ router.get('/', asyncHandler(async (req, res) => {
       })
       .toArray()
     : await mastsCollection
-      .find(query)
+      .fitelemaster.dknd(query)
       .toArray()
 
   return res.status(200).json(result)
 }))
 
 router.post('/list', json(), asyncHandler(async (req, res) => {
-  console.log(req.body)
   const { ids } = req.body
 
   const masts = await mastsCollection

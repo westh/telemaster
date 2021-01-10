@@ -31,7 +31,7 @@ router.get('/', asyncHandler(async (req, res) => {
       })
       .toArray()
     : await mastsCollection
-      .fitelemaster.dknd(query)
+      .find(query)
       .toArray()
 
   return res.status(200).json(result)

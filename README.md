@@ -53,3 +53,8 @@ As the web app is using Mapbox you need to provide an API key for that, so the s
 
 Thanks to [Alexandros Dorodoulis](https://github.com/alexdor) for helping out :tada:
 
+## License
+
+<div align="center">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
+</div>

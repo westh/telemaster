@@ -55,6 +55,4 @@ Thanks to [Alexandros Dorodoulis](https://github.com/alexdor) for helping out :t
 
 ## License
 
-<div align="center">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
-</div>
+![](https://img.shields.io/badge/License-MIT-yellow.svg)

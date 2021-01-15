@@ -51,7 +51,7 @@ function Sidebar ({ loading, onApply }) {
     <StyledSider>
       <MainWrapper>
         <Heading>
-          Access Technologies
+          Network Generations
         </Heading>
         <ContentWrapper>
           <Checkbox.Group

@@ -16,9 +16,9 @@ const Map = ({ data, onPopUp, popUpRef }) => {
   const mapContainerRef = useRef(null)
   const map = useRef()
 
-  const [lng, setLng] = useState(10.36)
-  const [lat, setLat] = useState(56.21)
-  const [zoom, setZoom] = useState(6.35)
+  const initalLongitude = 10.36
+  const intialLatitude = 56.21
+  const initialZoom = 6.35
   const [doesMapExist, setDoesMapExist] = useState(false)
 
   function createSourceIfNotAlreadyExists (sourceName, data) {
@@ -49,8 +49,12 @@ const Map = ({ data, onPopUp, popUpRef }) => {
       // This should improve mapbox performance according to
       // this: https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/#remove-unused-features
       style: 'mapbox://styles/mapbox/dark-v10?optimize=true',
-      center: [lng, lat],
-      zoom: zoom,
+      center: [initalLongitude, intialLatitude],
+      zoom: initialZoom,
+      maxBounds: [
+        [2.5, 53],
+        [18.5, 59]
+      ],
     })
 
     map.current.addControl(
@@ -63,11 +67,13 @@ const Map = ({ data, onPopUp, popUpRef }) => {
     map.current.addControl(new NavigationControl())
     map.current.addControl(new FullscreenControl())
 
-    map.current.on('move', () => {
-      setLng(map.current.getCenter().lng.toFixed(4))
-      setLat(map.current.getCenter().lat.toFixed(4))
-      setZoom(map.current.getZoom().toFixed(2))
-    })
+    // map.current.on('move', () => {
+      // console.log(map.current.getBounds())
+      // setLng(map.current.getCenter().lng.toFixed(4))
+      // setLat(map.current.getCenter().lat.toFixed(4))
+      // setZoom(map.current.getZoom().toFixed(2))
+
+    // })
 
     map.current.on('load', () => {
       setDoesMapExist(true)

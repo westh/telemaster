@@ -5,3 +5,9 @@
 .mapboxgl-popup-content, .mapboxgl-ctrl-group, .mapboxgl-ctrl-geocoder {
   border-radius: 8px;
 }
+
+.mapboxgl-popup-close-button {
+  height: 40px;
+  width: 40px;
+  font-size: 18px;
+}

@@ -56,3 +56,5 @@ Thanks to [Alexandros Dorodoulis](https://github.com/alexdor) for helping out :t
 ## License
 
 ![](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+<a href="https://www.buymeacoffee.com/westh" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg" alt="Buy Me A Coffee" style="height: 40px;"></a>
